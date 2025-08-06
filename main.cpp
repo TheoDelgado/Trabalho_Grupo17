@@ -11,7 +11,8 @@ using namespace std;
 MANUAL DE EXECUÇÃO:
 
 1. Digitar "g++ *.cpp -o execGrupo17" no terminal;
-2. Digitar "./execGrupo17 instancias/<arquivo_entrada>" no terminal.
+2. Digitar "./execGrupo17 instancias_t1/<arquivo_entrada>" no terminal.       // Para instâncias do trab1
+2.1. Digitar "./execGrupo17 instancias_t2/<arquivo_entrada>" no terminal.     // Para instâncias do trab2
 */
 
 
