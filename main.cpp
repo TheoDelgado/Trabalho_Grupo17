@@ -1,6 +1,7 @@
 #include "Grafo.h"
 #include "No.h"
 #include "Gerenciador.h"
+#include "Guloso.h"
 #include <iostream>
 #include <fstream>
 #include <sstream>

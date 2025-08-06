@@ -1,5 +1,7 @@
 #include "Gerenciador.h"
 #include "Grafo.h"
+#include "Guloso.h"
+#include <iomanip>
 #include <fstream>
 #include <vector>
 #include <iostream>
@@ -105,6 +107,32 @@ void salvarMedidasEmArquivo(const Grafo& g) {
     }
 }
 
+void salvarConjuntoEmArquivo(const set<char>& resultado) {
+    char opcao;
+    cout << "Deseja salvar o resultado em um arquivo? (s/n): ";
+    cin >> opcao;
+
+    if (opcao == 's' || opcao == 'S') {
+        string nomeArquivo;
+        cout << "Digite o nome do arquivo (ex: resultado.txt): ";
+        cin >> nomeArquivo;
+
+        ofstream arquivo(nomeArquivo);
+        if (!arquivo.is_open()) {
+            cerr << "Erro ao criar o arquivo!\n";
+            return;
+        }
+
+        for (char c : resultado) {
+            arquivo << c << " ";
+        }
+        arquivo << endl;
+        arquivo.close();
+        cout << "Resultado salvo com sucesso em \"" << nomeArquivo << "\".\n";
+    }
+}
+
+
 char Gerenciador::get_id_entrada() {
     char id;
     cout << "Digite o ID do no: ";
@@ -126,6 +154,9 @@ void Gerenciador::comandos(Grafo* grafo) {
          << "(f) AGM (Kruskal);\n"
          << "(g) Arvore DFS a partir de um no;\n"
          << "(h) Raio, diametro, centro e periferia;\n"
+         << "(i) CDI - Guloso Adaptativo;\n"
+         << "(j) CDI - Guloso Randomizado Adaptativo;\n"
+         << "(k) CDI - Guloso Randomizado Reativo;\n"
          << "(0) Sair.\n"
          << ">> ";
 
@@ -188,6 +219,36 @@ void Gerenciador::comandos(Grafo* grafo) {
             salvarMedidasEmArquivo(*grafo);
             break;
         }
+        case 'i': {
+            set<char> resultado = Guloso::gulosoAdaptativo(grafo);
+            cout << "CDI (Guloso Adaptativo): ";
+            for (char c : resultado) cout << c << " ";
+            cout << endl;
+            salvarConjuntoEmArquivo(resultado);
+            break;
+        }
+        /*
+        case 'j': {
+            float alpha;
+            cout << "Informe o valor de alpha (0 <= alpha <= 1): ";
+            cin >> alpha;
+            set<char> resultado = Guloso::gulosoRandomizadoAdaptativo(grafo, alpha);
+            cout << "CDI (Guloso Randomizado Adaptativo): ";
+            for (char c : resultado) cout << c << " ";
+            cout << endl;
+            break;
+        }
+        case 'k': {
+            int iteracoes;
+            cout << "Informe o numero de iteracoes: ";
+            cin >> iteracoes;
+            set<char> resultado = Guloso::gulosoRandomizadoReativo(grafo, iteracoes);
+            cout << "CDI (Guloso Randomizado Reativo): ";
+            for (char c : resultado) cout << c << " ";
+            cout << endl;
+            break;
+        }
+        */
         case '0': exit(0);
         default:
             cout << "Opcao invalida.\n";
