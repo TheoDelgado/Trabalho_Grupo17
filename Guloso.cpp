@@ -3,6 +3,8 @@
 #include <map>
 #include <vector>
 #include <algorithm>
+#include <ctime>
+#include <limits>
 using namespace std;
 
 // Implementação do algoritmo guloso adaptativo
@@ -60,4 +62,73 @@ set<char> Guloso::gulosoAdaptativo(Grafo* grafo) {
     }
 
     return conjuntoDominante;
+}
+
+set<char> Guloso::gulosoRandomizadoAdaptativo(Grafo* grafo, float alpha) {
+    const int numIter = 10;
+    set<char> melhorSolucao;
+    int melhorTamanho = numeric_limits<int>::max();
+
+    set<char> vertices = grafo->getVertices();
+    srand(time(0));
+
+    for (int iter = 0; iter < numIter; ++iter) {
+        set<char> solucao;
+        set<char> dominados;
+        set<char> LC = vertices;
+
+        while (dominados.size() < vertices.size() && !LC.empty()) {
+            vector<pair<char, int>> candidatosValidos;
+
+            // Avalia os vértices candidatos
+            for (char v : LC) {
+                if (dominados.count(v)) continue;
+
+                // Verifica independência (v não pode ser adjacente a ninguém já na solução)
+                bool independente = true;
+                for (char vizinho : grafo->getAdjacentes(v)) {
+                    if (solucao.count(vizinho)) {
+                        independente = false;
+                        break;
+                    }
+                }
+                if (!independente) continue;
+
+                // Calcula o ganho: quantos vértices v e seus vizinhos dominam
+                int ganho = 0;
+                if (!dominados.count(v)) ganho++;
+                for (char vizinho : grafo->getAdjacentes(v)) {
+                    if (!dominados.count(vizinho)) ganho++;
+                }
+
+                candidatosValidos.emplace_back(v, ganho);
+            }
+
+            if (candidatosValidos.empty()) break;
+
+            // Ordena os candidatos por maior ganho
+            sort(candidatosValidos.begin(), candidatosValidos.end(),
+                [](const auto& a, const auto& b) { return a.second > b.second; });
+
+            int limite = max(1, int(alpha * candidatosValidos.size()));
+            int k = rand() % limite;
+            char escolhido = candidatosValidos[k].first;
+
+            // Adiciona o vértice à solução e marca ele e seus vizinhos como dominados
+            solucao.insert(escolhido);
+            dominados.insert(escolhido);
+            for (char vizinho : grafo->getAdjacentes(escolhido))
+                dominados.insert(vizinho);
+
+            LC.erase(escolhido); // remove da lista de candidatos
+        }
+
+        // Atualiza a melhor solução até agora
+        if (solucao.size() < melhorTamanho) {
+            melhorSolucao = solucao;
+            melhorTamanho = solucao.size();
+        }
+    }
+
+    return melhorSolucao;
 }

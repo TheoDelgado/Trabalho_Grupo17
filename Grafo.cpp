@@ -68,6 +68,20 @@ set<char> Grafo::getVertices() const {
     return v;
 }
 
+set<char> Grafo::getAdjacentes(char id) const {
+    std::set<char> adjacentes;
+    No* no = buscarNo(id);
+    if (!no) return adjacentes;
+
+    Aresta* aresta = no->getPrimeiraAresta();
+    while (aresta) {
+        adjacentes.insert(aresta->getDestino()->getId());
+        aresta = aresta->getProxima();
+    }
+    return adjacentes;
+}
+
+
 bool Grafo::getPonderadoArestas() const {
     return ponderadoArestas;
 }

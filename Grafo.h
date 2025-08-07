@@ -24,6 +24,7 @@ public:
     void adicionarAresta(char origem, char destino, int peso = 1);
     No* buscarNo(char id) const;
     set<char> getVertices() const;
+    set<char> getAdjacentes(char id) const;
     void imprimir() const;
     void imprimirVetor(const vector<char>& vec);
     Grafo DFS_arvore(char origemId) const;

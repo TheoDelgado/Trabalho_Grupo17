@@ -227,25 +227,29 @@ void Gerenciador::comandos(Grafo* grafo) {
             salvarConjuntoEmArquivo(resultado);
             break;
         }
-        /*
         case 'j': {
             float alpha;
-            cout << "Informe o valor de alpha (0 <= alpha <= 1): ";
+            cout << "Digite o valor de alpha (0 <= alpha <= 1): ";
             cin >> alpha;
+            if (alpha < 0.0f || alpha > 1.0f) {
+                cout << "Valor de alpha inválido. Deve estar entre 0 e 1.\n";
+                break;
+            }
             set<char> resultado = Guloso::gulosoRandomizadoAdaptativo(grafo, alpha);
-            cout << "CDI (Guloso Randomizado Adaptativo): ";
+            cout << "\nConjunto Dominante Independente (Guloso Randomizado Adaptativo): ";
             for (char c : resultado) cout << c << " ";
             cout << endl;
+            salvarConjuntoEmArquivo(resultado);
             break;
         }
+
+        /*
         case 'k': {
-            int iteracoes;
-            cout << "Informe o numero de iteracoes: ";
-            cin >> iteracoes;
-            set<char> resultado = Guloso::gulosoRandomizadoReativo(grafo, iteracoes);
-            cout << "CDI (Guloso Randomizado Reativo): ";
+            std::set<char> resultado = Guloso::gulosoRandomizadoReativo(grafo);
+            cout << "CDI (Guloso Randomizado Reativo Adaptativo): ";
             for (char c : resultado) cout << c << " ";
             cout << endl;
+            salvarSetEmArquivo(resultado);
             break;
         }
         */
