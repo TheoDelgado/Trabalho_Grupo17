@@ -10,9 +10,7 @@ class Guloso {
 public:
     // Retorna um conjunto dominante independente usando algoritmo guloso adaptativo
     static set<char> gulosoAdaptativo(Grafo* grafo);
-
-    // Outros algoritmos (a serem implementados depois)
-    //static set<char> gulosoRandomizadoAdaptativo(Grafo* grafo, float alpha);
+    static set<char> gulosoRandomizadoAdaptativo(Grafo* grafo, float alpha);
     //static set<char> gulosoRandomizadoReativo(Grafo* grafo, int iteracoes);
 };
 
