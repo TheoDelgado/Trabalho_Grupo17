@@ -1,0 +1,11 @@
+MANUAL DE EXECUÇÃO:
+
+1. Digitar "g++ *.cpp -o execGrupo17" no terminal;
+
+Testar as instâncias do trabalho1:
+
+2. Digitar "./execGrupo17 instancias_t1/<arquivo_entrada>" no terminal.
+
+Testar as instâncias do trabalho2:
+
+2. Digitar "./execGrupo17 instancias_t2/<arquivo_entrada>" no terminal.
