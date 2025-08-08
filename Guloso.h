@@ -9,9 +9,9 @@ using namespace std;
 class Guloso {
 public:
     // Retorna um conjunto dominante independente usando algoritmo guloso adaptativo
-    static set<char> gulosoAdaptativo(Grafo* grafo);
-    static set<char> gulosoRandomizadoAdaptativo(Grafo* grafo, float alpha);
-    static set<char> gulosoRandomizadoAdaptativoReativo(Grafo* grafo);
+    static vector<char> gulosoAdaptativo(Grafo* grafo);
+    static vector<char> gulosoRandomizadoAdaptativo(Grafo* grafo, float alpha);
+    static vector<char> gulosoRandomizadoAdaptativoReativo(Grafo* grafo);
 };
 
 #endif // GULOSO_H

@@ -107,6 +107,7 @@ void salvarMedidasEmArquivo(const Grafo& g) {
     }
 }
 
+/*
 void salvarConjuntoEmArquivo(const set<char>& resultado) {
     char opcao;
     cout << "Deseja salvar o resultado em um arquivo? (s/n): ";
@@ -131,7 +132,7 @@ void salvarConjuntoEmArquivo(const set<char>& resultado) {
         cout << "Resultado salvo com sucesso em \"" << nomeArquivo << "\".\n";
     }
 }
-
+*/
 
 char Gerenciador::get_id_entrada() {
     char id;
@@ -220,13 +221,14 @@ void Gerenciador::comandos(Grafo* grafo) {
             break;
         }
         case 'i': {
-            set<char> resultado = Guloso::gulosoAdaptativo(grafo);
+            vector<char> resultado = Guloso::gulosoAdaptativo(grafo);
             cout << "CDI (Guloso Adaptativo): ";
             for (char c : resultado) cout << c << " ";
             cout << endl;
-            salvarConjuntoEmArquivo(resultado);
+            salvarResultadoEmArquivo(resultado); // já funciona para vector<char>
             break;
         }
+
         case 'j': {
             float alpha;
             cout << "Digite o valor de alpha (0 <= alpha <= 1): ";
@@ -235,23 +237,23 @@ void Gerenciador::comandos(Grafo* grafo) {
                 cout << "Valor de alpha inválido. Deve estar entre 0 e 1.\n";
                 break;
             }
-            set<char> resultado = Guloso::gulosoRandomizadoAdaptativo(grafo, alpha);
+            vector<char> resultado = Guloso::gulosoRandomizadoAdaptativo(grafo, alpha);
             cout << "\nConjunto Dominante Independente (Guloso Randomizado Adaptativo): ";
             for (char c : resultado) cout << c << " ";
             cout << endl;
-            salvarConjuntoEmArquivo(resultado);
+            salvarResultadoEmArquivo(resultado); // usa função para vetor, mantém ordem de inserção
             break;
         }
 
         case 'k': {
-            set<char> resultado = Guloso::gulosoRandomizadoAdaptativoReativo(grafo);
+            vector<char> resultado = Guloso::gulosoRandomizadoAdaptativoReativo(grafo);
             cout << "CDI (Guloso Randomizado Reativo Adaptativo): ";
             for (char c : resultado) cout << c << " ";
             cout << "\nTamanho da solução: " << resultado.size() << endl;
-            salvarConjuntoEmArquivo(resultado);
+            salvarResultadoEmArquivo(resultado);
             break;
         }
-        
+                
         case '0': exit(0);
         default:
             cout << "Opcao invalida.\n";
