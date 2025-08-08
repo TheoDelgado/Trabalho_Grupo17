@@ -1,0 +1,30 @@
+Tempo em microsegundos:
+
+GULOSO ADAPTATIVO:
+
+169, 323, 246, 279, 213, 338, 313, 276, 318, 246
+Menor tempo: 169
+Tempo médio: 272.1 (0.0002721 s)
+
+RANDOMIZADO ADAPTATIVO:
+
+alpha = 0.2
+607, 475, 470, 445, 533, 424, 562, 365, 454, 529
+Menor tempo: 365
+Tempo médio: 486.4 (0.0004864 s)
+
+alpha = 0.5
+468, 433, 543, 338, 600, 655, 549, 442, 778, 431
+Menor tempo: 338
+Tempo médio: 523,7 (0.0005237 s)
+
+alpha = 0.7
+571, 442, 541, 482, 534, 531, 444, 553, 474, 413
+Menor tempo: 413
+Tempo médio: 498.5 (0.0004985 s)
+
+RANDOMIZADO ADAPTATIVO REATIVO:
+
+426, 569, 523, 423, 446, 420, 465, 458, 496, 736
+Menor tempo: 420
+Tempo médio: 496.2 (0.0004962 s)
