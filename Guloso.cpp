@@ -5,6 +5,8 @@
 #include <algorithm>
 #include <ctime>
 #include <limits>
+#include <random>
+#include <numeric>
 using namespace std;
 
 // Implementação do algoritmo guloso adaptativo
@@ -127,6 +129,100 @@ set<char> Guloso::gulosoRandomizadoAdaptativo(Grafo* grafo, float alpha) {
         if (solucao.size() < melhorTamanho) {
             melhorSolucao = solucao;
             melhorTamanho = solucao.size();
+        }
+    }
+
+    return melhorSolucao;
+}
+
+set<char> Guloso::gulosoRandomizadoAdaptativoReativo(Grafo* grafo) {
+    const int numIter = 10;
+    const int bloco = 1;
+    vector<float> alfas = {0.05f, 0.1f, 0.15f, 0.3f, 0.5f};
+    int m = alfas.size();
+
+    vector<float> M(m, 0.0f);   // médias
+    vector<float> P(m, 1.0f / m); // probabilidades iniciais
+    set<char> melhorSolucao;
+    int melhorTamanho = numeric_limits<int>::max();
+
+    set<char> vertices = grafo->getVertices();
+    srand(time(0));
+
+    auto escolherAlphaIndex = [&]() -> int {
+        float r = static_cast<float>(rand()) / RAND_MAX;
+        float acumulado = 0.0f;
+        for (int i = 0; i < m; ++i) {
+            acumulado += P[i];
+            if (r <= acumulado) return i;
+        }
+        return m - 1;
+    };
+
+    for (int iter = 1; iter <= numIter; ++iter) {
+        if (iter % bloco == 0) {
+            float soma = 0.0f;
+            for (int i = 0; i < m; ++i)
+                soma += 1.0f / (M[i] + 1e-6f); // evitar divisão por zero
+
+            for (int i = 0; i < m; ++i)
+                P[i] = (1.0f / (M[i] + 1e-6f)) / soma;
+        }
+
+        int alphaIndex = escolherAlphaIndex();
+        float alpha = alfas[alphaIndex];
+
+        set<char> solucao;
+        set<char> dominados;
+        set<char> LC = vertices;
+
+        while (dominados.size() < vertices.size() && !LC.empty()) {
+            vector<pair<char, int>> candidatosValidos;
+
+            for (char v : LC) {
+                if (dominados.count(v)) continue;
+
+                bool independente = true;
+                for (char vizinho : grafo->getAdjacentes(v)) {
+                    if (solucao.count(vizinho)) {
+                        independente = false;
+                        break;
+                    }
+                }
+                if (!independente) continue;
+
+                int ganho = 0;
+                if (!dominados.count(v)) ganho++;
+                for (char vizinho : grafo->getAdjacentes(v)) {
+                    if (!dominados.count(vizinho)) ganho++;
+                }
+
+                candidatosValidos.emplace_back(v, ganho);
+            }
+
+            if (candidatosValidos.empty()) break;
+
+            sort(candidatosValidos.begin(), candidatosValidos.end(),
+                [](const auto& a, const auto& b) { return a.second > b.second; });
+
+            int limite = max(1, int(alpha * candidatosValidos.size()));
+            int k = rand() % limite;
+            char escolhido = candidatosValidos[k].first;
+
+            solucao.insert(escolhido);
+            dominados.insert(escolhido);
+            for (char vizinho : grafo->getAdjacentes(escolhido))
+                dominados.insert(vizinho);
+
+            LC.erase(escolhido);
+        }
+
+        int tamSol = solucao.size();
+        M[alphaIndex] = (M[alphaIndex] * (iter - 1) + tamSol) / iter;
+
+        if (tamSol < melhorTamanho) {
+            melhorTamanho = tamSol;
+            melhorSolucao = solucao;
         }
     }
 

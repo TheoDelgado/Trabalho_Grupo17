@@ -11,7 +11,7 @@ public:
     // Retorna um conjunto dominante independente usando algoritmo guloso adaptativo
     static set<char> gulosoAdaptativo(Grafo* grafo);
     static set<char> gulosoRandomizadoAdaptativo(Grafo* grafo, float alpha);
-    //static set<char> gulosoRandomizadoReativo(Grafo* grafo, int iteracoes);
+    static set<char> gulosoRandomizadoAdaptativoReativo(Grafo* grafo);
 };
 
 #endif // GULOSO_H

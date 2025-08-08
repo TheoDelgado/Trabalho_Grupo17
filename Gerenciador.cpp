@@ -156,7 +156,7 @@ void Gerenciador::comandos(Grafo* grafo) {
          << "(h) Raio, diametro, centro e periferia;\n"
          << "(i) CDI - Guloso Adaptativo;\n"
          << "(j) CDI - Guloso Randomizado Adaptativo;\n"
-         << "(k) CDI - Guloso Randomizado Reativo;\n"
+         << "(k) CDI - Guloso Randomizado Adaptativo Reativo;\n"
          << "(0) Sair.\n"
          << ">> ";
 
@@ -243,16 +243,15 @@ void Gerenciador::comandos(Grafo* grafo) {
             break;
         }
 
-        /*
         case 'k': {
-            std::set<char> resultado = Guloso::gulosoRandomizadoReativo(grafo);
+            set<char> resultado = Guloso::gulosoRandomizadoAdaptativoReativo(grafo);
             cout << "CDI (Guloso Randomizado Reativo Adaptativo): ";
             for (char c : resultado) cout << c << " ";
-            cout << endl;
-            salvarSetEmArquivo(resultado);
+            cout << "\nTamanho da solução: " << resultado.size() << endl;
+            salvarConjuntoEmArquivo(resultado);
             break;
         }
-        */
+        
         case '0': exit(0);
         default:
             cout << "Opcao invalida.\n";
