@@ -107,33 +107,6 @@ void salvarMedidasEmArquivo(const Grafo& g) {
     }
 }
 
-/*
-void salvarConjuntoEmArquivo(const set<char>& resultado) {
-    char opcao;
-    cout << "Deseja salvar o resultado em um arquivo? (s/n): ";
-    cin >> opcao;
-
-    if (opcao == 's' || opcao == 'S') {
-        string nomeArquivo;
-        cout << "Digite o nome do arquivo (ex: resultado.txt): ";
-        cin >> nomeArquivo;
-
-        ofstream arquivo(nomeArquivo);
-        if (!arquivo.is_open()) {
-            cerr << "Erro ao criar o arquivo!\n";
-            return;
-        }
-
-        for (char c : resultado) {
-            arquivo << c << " ";
-        }
-        arquivo << endl;
-        arquivo.close();
-        cout << "Resultado salvo com sucesso em \"" << nomeArquivo << "\".\n";
-    }
-}
-*/
-
 char Gerenciador::get_id_entrada() {
     char id;
     cout << "Digite o ID do no: ";
@@ -249,7 +222,7 @@ void Gerenciador::comandos(Grafo* grafo) {
             vector<char> resultado = Guloso::gulosoRandomizadoAdaptativoReativo(grafo);
             cout << "CDI (Guloso Randomizado Reativo Adaptativo): ";
             for (char c : resultado) cout << c << " ";
-            cout << "\nTamanho da solução: " << resultado.size() << endl;
+            cout << "\nTamanho da solucao: " << resultado.size() << endl;
             salvarResultadoEmArquivo(resultado);
             break;
         }
