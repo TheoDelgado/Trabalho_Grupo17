@@ -114,6 +114,7 @@ char Gerenciador::get_id_entrada() {
     return id;
 }
 
+//Interface para comandos do usuário
 void Gerenciador::comandos(Grafo* grafo) {
     map<char, No*> mapa;
     for (char v : grafo->getVertices())
@@ -207,11 +208,11 @@ void Gerenciador::comandos(Grafo* grafo) {
             cout << "Digite o valor de alpha (0 <= alpha <= 1): ";
             cin >> alpha;
             if (alpha < 0.0f || alpha > 1.0f) {
-                cout << "Valor de alpha inválido. Deve estar entre 0 e 1.\n";
+                cout << "Valor de alpha invalido. Deve estar entre 0 e 1.\n";
                 break;
             }
             vector<char> resultado = Guloso::gulosoRandomizadoAdaptativo(grafo, alpha);
-            cout << "\nConjunto Dominante Independente (Guloso Randomizado Adaptativo): ";
+            cout << "CDI (Guloso Randomizado Adaptativo): ";
             for (char c : resultado) cout << c << " ";
             cout << endl;
             salvarResultadoEmArquivo(resultado); // usa função para vetor, mantém ordem de inserção

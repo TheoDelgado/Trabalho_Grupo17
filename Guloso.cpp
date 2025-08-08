@@ -12,37 +12,44 @@
 #include <iostream>
 using namespace std;
 
+//Implementa o algoritmo Guloso Adaptativo para encontrar um Conjunto Dominante Independente (CDI) no grafo
 vector<char> Guloso::gulosoAdaptativo(Grafo* grafo) {
-    auto inicio = chrono::high_resolution_clock::now();
+    auto inicio = chrono::high_resolution_clock::now(); // Marca tempo inicial
 
-    vector<char> conjuntoDominante;
-    unordered_set<char> conjuntoDominanteSet;
-    unordered_set<char> verticesDominados;
-    map<char, No*> mapa;
+    vector<char> conjuntoDominante;           // Armazena solução final
+    unordered_set<char> conjuntoDominanteSet; // Versão em conjunto (para buscas rápidas)
+    unordered_set<char> verticesDominados;    // Conjunto de vértices já dominados
+    map<char, No*> mapa;                      // Mapeia ID do vértice para seu objeto "No"
 
+    // Cria um mapa para acesso rápido aos nós do grafo
     for (char v : grafo->getVertices()) {
         mapa[v] = grafo->buscarNo(v);
     }
 
+    // Enquanto ainda houver vértices não dominados
     while (verticesDominados.size() < mapa.size()) {
-        char melhorNo = 0;
-        int melhorGanho = -1;
+        char melhorNo = 0;   // Melhor vértice a ser escolhido nesta iteração
+        int melhorGanho = -1; // Quantos vértices novos esse nó domina
 
+        // Verifica todos os vértices do grafo
         for (const auto& [id, no] : mapa) {
+            // Ignora se já está na solução ou já foi dominado
             if (conjuntoDominanteSet.count(id) || verticesDominados.count(id)) continue;
 
             unordered_set<char> candidatos;
-            candidatos.insert(id);
+            candidatos.insert(id); // Inclui ele próprio
 
+            // Percorre vizinhos do vértice
             Aresta* a = no->getPrimeiraAresta();
             while (a) {
                 char vizinho = a->getDestino()->getId();
                 if (!verticesDominados.count(vizinho)) {
-                    candidatos.insert(vizinho);
+                    candidatos.insert(vizinho); // Adiciona vizinhos não dominados
                 }
                 a = a->getProxima();
             }
 
+            // Calcula o ganho
             int ganho = candidatos.size();
             if (ganho > melhorGanho) {
                 melhorGanho = ganho;
@@ -50,12 +57,15 @@ vector<char> Guloso::gulosoAdaptativo(Grafo* grafo) {
             }
         }
 
+        // Se não encontrou vértice, interrompe
         if (melhorNo == 0) break;
 
+        // Adiciona o melhor vértice à solução
         conjuntoDominante.push_back(melhorNo);
         conjuntoDominanteSet.insert(melhorNo);
         verticesDominados.insert(melhorNo);
 
+        // Marca todos os vizinhos como dominados
         Aresta* a = mapa[melhorNo]->getPrimeiraAresta();
         while (a) {
             verticesDominados.insert(a->getDestino()->getId());
@@ -63,6 +73,7 @@ vector<char> Guloso::gulosoAdaptativo(Grafo* grafo) {
         }
     }
 
+    // Calcula e mostra o tempo de execução
     auto fim = chrono::high_resolution_clock::now();
     auto duracao = chrono::duration_cast<chrono::microseconds>(fim - inicio).count();
     cout << "Tempo Guloso Adaptativo: " << duracao << " microsegundos\n";
@@ -70,27 +81,30 @@ vector<char> Guloso::gulosoAdaptativo(Grafo* grafo) {
     return conjuntoDominante;
 }
 
+//Versão randomizada do Guloso Adaptativo
 vector<char> Guloso::gulosoRandomizadoAdaptativo(Grafo* grafo, float alpha) {
     auto inicio = chrono::high_resolution_clock::now();
 
-    const int numIter = 1;
+    const int numIter = 1; // Quantidade de vezes que o algoritmo será executado para buscar melhor solução
     vector<char> melhorSolucao;
     int melhorTamanho = numeric_limits<int>::max();
 
     set<char> vertices = grafo->getVertices();
-    srand(time(0));
+    srand(time(0)); // Semente aleatória
 
     for (int iter = 0; iter < numIter; ++iter) {
         vector<char> solucao;
         set<char> dominados;
-        set<char> LC = vertices;
+        set<char> LC = vertices; // Lista de candidatos
 
         while (dominados.size() < vertices.size() && !LC.empty()) {
             vector<pair<char, int>> candidatosValidos;
 
+            // Avalia todos os candidatos
             for (char v : LC) {
                 if (dominados.count(v)) continue;
 
+                // Garante que o conjunto permanece independente
                 bool independente = true;
                 for (char vizinho : grafo->getAdjacentes(v)) {
                     if (find(solucao.begin(), solucao.end(), vizinho) != solucao.end()) {
@@ -100,6 +114,7 @@ vector<char> Guloso::gulosoRandomizadoAdaptativo(Grafo* grafo, float alpha) {
                 }
                 if (!independente) continue;
 
+                // Calcula ganho de dominar vértices
                 int ganho = 0;
                 if (!dominados.count(v)) ganho++;
                 for (char vizinho : grafo->getAdjacentes(v)) {
@@ -111,13 +126,16 @@ vector<char> Guloso::gulosoRandomizadoAdaptativo(Grafo* grafo, float alpha) {
 
             if (candidatosValidos.empty()) break;
 
+            // Ordena pelo maior ganho
             sort(candidatosValidos.begin(), candidatosValidos.end(),
                 [](const auto& a, const auto& b) { return a.second > b.second; });
 
+            // Define tamanho da lista restrita de candidatos (LRC)
             int limite = max(1, int(alpha * candidatosValidos.size()));
-            int k = rand() % limite;
+            int k = rand() % limite; // Escolhe aleatoriamente dentro da LRC
             char escolhido = candidatosValidos[k].first;
 
+            // Atualiza solução e dominados
             solucao.push_back(escolhido);
             dominados.insert(escolhido);
             for (char vizinho : grafo->getAdjacentes(escolhido))
@@ -126,12 +144,14 @@ vector<char> Guloso::gulosoRandomizadoAdaptativo(Grafo* grafo, float alpha) {
             LC.erase(escolhido);
         }
 
+        // Guarda melhor solução
         if ((int)solucao.size() < melhorTamanho) {
             melhorSolucao = solucao;
             melhorTamanho = solucao.size();
         }
     }
 
+    // Mostra tempo de execução
     auto fim = chrono::high_resolution_clock::now();
     auto duracao = chrono::duration_cast<chrono::microseconds>(fim - inicio).count();
     cout << "Tempo Guloso Randomizado Adaptativo: " << duracao << " microsegundos\n";
@@ -139,22 +159,24 @@ vector<char> Guloso::gulosoRandomizadoAdaptativo(Grafo* grafo, float alpha) {
     return melhorSolucao;
 }
 
+// Versão reativa do Guloso Randomizado Adaptativo
 vector<char> Guloso::gulosoRandomizadoAdaptativoReativo(Grafo* grafo) {
     auto inicio = chrono::high_resolution_clock::now();
 
-    const int numIter = 1;
-    const int bloco = 1;
-    vector<float> alfas = {0.2f, 0.5f, 0.7f};
+    const int numIter = 1;   // Número de execuções
+    const int bloco = 1;     // Intervalo de atualização das probabilidades
+    vector<float> alfas = {0.2f, 0.5f, 0.7f}; // Valores possíveis de alpha
     int m = alfas.size();
 
-    vector<float> M(m, 0.0f);
-    vector<float> P(m, 1.0f / m);
+    vector<float> M(m, 0.0f);           // Média de tamanho de solução para cada alpha
+    vector<float> P(m, 1.0f / m);       // Probabilidades iniciais iguais
     vector<char> melhorSolucao;
     int melhorTamanho = numeric_limits<int>::max();
 
     set<char> vertices = grafo->getVertices();
     srand(time(0));
 
+    // Função lambda para escolher índice de alpha baseado em probabilidade
     auto escolherAlphaIndex = [&]() -> int {
         float r = static_cast<float>(rand()) / RAND_MAX;
         float acumulado = 0.0f;
@@ -166,6 +188,7 @@ vector<char> Guloso::gulosoRandomizadoAdaptativoReativo(Grafo* grafo) {
     };
 
     for (int iter = 1; iter <= numIter; ++iter) {
+        // Atualiza probabilidades a cada "bloco" de execuções
         if (iter % bloco == 0) {
             float soma = 0.0f;
             for (int i = 0; i < m; ++i)
@@ -174,6 +197,7 @@ vector<char> Guloso::gulosoRandomizadoAdaptativoReativo(Grafo* grafo) {
                 P[i] = (1.0f / (M[i] + 1e-6f)) / soma;
         }
 
+        // Escolhe alpha dinamicamente
         int alphaIndex = escolherAlphaIndex();
         float alpha = alfas[alphaIndex];
 
@@ -181,12 +205,14 @@ vector<char> Guloso::gulosoRandomizadoAdaptativoReativo(Grafo* grafo) {
         set<char> dominados;
         set<char> LC = vertices;
 
+        // Constrói solução com alpha escolhido
         while (dominados.size() < vertices.size() && !LC.empty()) {
             vector<pair<char, int>> candidatosValidos;
 
             for (char v : LC) {
                 if (dominados.count(v)) continue;
 
+                // Mantém independência
                 bool independente = true;
                 for (char vizinho : grafo->getAdjacentes(v)) {
                     if (find(solucao.begin(), solucao.end(), vizinho) != solucao.end()) {
@@ -196,6 +222,7 @@ vector<char> Guloso::gulosoRandomizadoAdaptativoReativo(Grafo* grafo) {
                 }
                 if (!independente) continue;
 
+                // Calcula ganho
                 int ganho = 0;
                 if (!dominados.count(v)) ganho++;
                 for (char vizinho : grafo->getAdjacentes(v)) {
@@ -207,6 +234,7 @@ vector<char> Guloso::gulosoRandomizadoAdaptativoReativo(Grafo* grafo) {
 
             if (candidatosValidos.empty()) break;
 
+            // Ordena e cria LRC
             sort(candidatosValidos.begin(), candidatosValidos.end(),
                 [](const auto& a, const auto& b) { return a.second > b.second; });
 
@@ -222,15 +250,18 @@ vector<char> Guloso::gulosoRandomizadoAdaptativoReativo(Grafo* grafo) {
             LC.erase(escolhido);
         }
 
+        // Atualiza média de desempenho do alpha usado
         int tamSol = solucao.size();
         M[alphaIndex] = (M[alphaIndex] * (iter - 1) + tamSol) / iter;
 
+        // Guarda melhor solução
         if (tamSol < melhorTamanho && tamSol > 0) {
             melhorTamanho = tamSol;
             melhorSolucao = solucao;
         }
     }
 
+    // Mostra tempo de execução
     auto fim = chrono::high_resolution_clock::now();
     auto duracao = chrono::duration_cast<chrono::microseconds>(fim - inicio).count();
     cout << "Tempo Guloso Randomizado Adaptativo Reativo: " << duracao << " microsegundos\n";
