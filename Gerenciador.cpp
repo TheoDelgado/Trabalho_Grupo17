@@ -221,7 +221,7 @@ void Gerenciador::comandos(Grafo* grafo) {
 
         case 'k': {
             vector<char> resultado = Guloso::gulosoRandomizadoAdaptativoReativo(grafo);
-            cout << "CDI (Guloso Randomizado Reativo Adaptativo): ";
+            cout << "CDI (Guloso Randomizado Adaptativo Reativo): ";
             for (char c : resultado) cout << c << " ";
             cout << "\nTamanho da solucao: " << resultado.size() << endl;
             salvarResultadoEmArquivo(resultado);
