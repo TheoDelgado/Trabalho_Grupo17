@@ -85,7 +85,7 @@ vector<char> Guloso::gulosoAdaptativo(Grafo* grafo) {
 vector<char> Guloso::gulosoRandomizadoAdaptativo(Grafo* grafo, float alpha) {
     auto inicio = chrono::high_resolution_clock::now();
 
-    const int numIter = 1; // Quantidade de vezes que o algoritmo será executado para buscar melhor solução
+    const int numIter = 30; // Quantidade de vezes que o algoritmo será executado para buscar melhor solução
     vector<char> melhorSolucao;
     int melhorTamanho = numeric_limits<int>::max();
 
@@ -163,8 +163,8 @@ vector<char> Guloso::gulosoRandomizadoAdaptativo(Grafo* grafo, float alpha) {
 vector<char> Guloso::gulosoRandomizadoAdaptativoReativo(Grafo* grafo) {
     auto inicio = chrono::high_resolution_clock::now();
 
-    const int numIter = 1;   // Número de execuções
-    const int bloco = 1;     // Intervalo de atualização das probabilidades
+    const int numIter = 300;   // Número de execuções
+    const int bloco = 30;     // Intervalo de atualização das probabilidades
     vector<float> alfas = {0.2f, 0.5f, 0.7f}; // Valores possíveis de alpha
     int m = alfas.size();
 
