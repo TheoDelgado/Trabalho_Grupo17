@@ -4,7 +4,7 @@ GULOSO ADAPTATIVO (Iterações = 1):
 
 354, 284, 287, 289, 280, 298, 294, 295, 285, 333
 Menor tempo: 280
-Tempo médio: 299.9 (0,0002999 s)
+Tempo médio: 299.9 (0.0002999 s)
 
 RANDOMIZADO ADAPTATIVO (Iterações = 30):
 
