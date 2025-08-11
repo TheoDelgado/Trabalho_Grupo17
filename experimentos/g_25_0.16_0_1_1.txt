@@ -1,30 +1,30 @@
 Tempo em microsegundos:
 
-GULOSO ADAPTATIVO:
+GULOSO ADAPTATIVO (Iterações = 1):
 
 316, 221, 286, 218, 215, 187, 225, 258, 347, 335
 Menor tempo: 187
 Tempo médio: 260.8 (0.0002608 s)
 
-RANDOMIZADO ADAPTATIVO:
+RANDOMIZADO ADAPTATIVO (Iterações = 30):
 
 alpha = 0.2
-496, 396, 475, 426, 369, 551, 561, 421, 547, 400
-Menor tempo: 369
-Tempo médio: 464.2 (0.0004642 s)
+8399, 8059, 8581, 7849, 7997, 8213, 8577, 8545, 8236, 8994
+Menor tempo: 7849
+Tempo médio: 8345 (0.008345 s)
 
 alpha = 0.5
-546, 371, 413, 544, 438, 460, 535, 456, 452, 495
-Menor tempo: 371
-Tempo médio: 471 (0.000471 s)
+9309, 9470, 8289, 8955, 8661, 8726, 9065, 8874, 10038, 9507
+Menor tempo: 8289
+Tempo médio: 9089.4 (0.0090894 s)
 
 alpha = 0.7
-544, 473, 536, 546, 510, 486, 401, 442, 607, 436
-Menor tempo: 401
-Tempo médio: 498.1 (0.0004981 s)
+9982, 9927, 10104, 10653, 11770, 9783, 9287, 10569, 10378, 9674
+Menor tempo: 9287
+Tempo médio: 10212.7 (0.0102127 s)
 
-RANDOMIZADO ADAPTATIVO REATIVO:
+RANDOMIZADO ADAPTATIVO REATIVO (Iterações = 300 / Bloco = 30):
 
-535, 399, 476, 457, 371, 491, 422, 479, 428, 355
-Menor tempo: 355
-Tempo médio: 441.3 (0.0004413 s)
+95750, 95737, 94814, 94286, 94056, 93800, 94730, 93648, 95645, 95470
+Menor tempo: 93648
+Tempo médio: 94793.6 (0.0947936 s)

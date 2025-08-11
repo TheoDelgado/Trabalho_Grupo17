@@ -2,16 +2,18 @@ MANUAL DE EXECUÇÃO:
 
 1. Digitar "g++ *.cpp -o execGrupo17" no terminal;
 
-Testar as instâncias do trabalho1:
+Testar as instâncias do trabalho 1:
 
 2. Digitar "./execGrupo17 instancias_t1/<arquivo_entrada>" no terminal.
 
-Testar as instâncias do trabalho2:
+Testar as instâncias do trabalho 2:
 
 2. Digitar "./execGrupo17 instancias_t2/<arquivo_entrada>" no terminal.
 
 OBSERVAÇÕES:
 
-- O usuário consegue escolher qual dos 3 algoritmos gulosos, além dos outros do primeiro trabalho, através da menu (interface).
+- O usuário consegue escolher qual dos 3 algoritmos gulosos, além dos outros algoritmos do primeiro trabalho, através do menu (interface).
 
 - Se o usuário quiser salvar o resultado, ele tem a opção de salvar a saída em um arquivo (.txt).
+
+- Foi criada uma pasta "experimentos" com todos os registros de experimentos feitos nas instancias_t2.
